@@ -15,6 +15,7 @@ public class DownloadProcess extends Thread {
     private String downloadUrl;
     private String path;
     private double currentProgress = 0.0;
+    private DownloadState state = DownloadState.PAUSED;
 
     public DownloadProcess(String url, String path) {
         this.downloadUrl = url;
@@ -38,6 +39,7 @@ public class DownloadProcess extends Thread {
             byte[] data = new byte[1024];
             int byteContent;
             int downloaded = 0;
+            state = DownloadState.DOWNLOADING;
             while ((byteContent = in.read(data, 0, 1024)) != -1) {
                 downloaded += byteContent;
 
@@ -50,9 +52,16 @@ public class DownloadProcess extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        state = DownloadState.COMPLETED;
+        System.out.println("Download process finished");
     }
 
     public double getCurrentProgress() {
         return currentProgress;
+    }
+
+    public DownloadState getDownloadState() {
+        return state;
     }
 }

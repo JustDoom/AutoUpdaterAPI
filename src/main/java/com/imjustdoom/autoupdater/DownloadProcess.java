@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class DownloadProcess extends Thread {
+public class DownloadProcess implements Runnable {
 
     private String downloadUrl;
     private String path;
@@ -22,8 +22,16 @@ public class DownloadProcess extends Thread {
         this.path = path;
     }
 
+    public double getCurrentProgress() {
+        return currentProgress;
+    }
+
+    public DownloadState getDownloadState() {
+        return state;
+    }
+
     @Override
-    public void start() {
+    public void run() {
         System.out.println("Download process started");
 
         try {
@@ -55,13 +63,5 @@ public class DownloadProcess extends Thread {
 
         state = DownloadState.COMPLETED;
         System.out.println("Download process finished");
-    }
-
-    public double getCurrentProgress() {
-        return currentProgress;
-    }
-
-    public DownloadState getDownloadState() {
-        return state;
     }
 }
